@@ -31,7 +31,8 @@ defmodule ExEsi.Request do
 
     full_headers =
       headers
-      |> List.keystore("User-Agent", 0, {"User-Agent", config.user_agent})
+      |> List.keystore("User-Agent", 0, {"User-Agent", Map.get(config, :user_agent)})
+      |> auth_headers(config)
 
     if config[:debug_requests] do
       Logger.debug(
@@ -109,5 +110,12 @@ defmodule ExEsi.Request do
     |> trunc
     |> :rand.uniform()
     |> :timer.sleep()
+  end
+
+  defp auth_headers(headers, config) do
+    case Map.get(config, :access_token) do
+      nil -> headers
+      token -> List.keystore(headers, "Authorization", 0, {"Authorization", "Bearer #{token}"})
+    end
   end
 end

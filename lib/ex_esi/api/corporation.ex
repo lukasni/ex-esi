@@ -16,14 +16,18 @@ defmodule ExEsi.API.Corporation do
   end
 
   @version "v2"
-  def blueprints(corporation_id, token) do
+  def blueprints(corporation_id) do
     "/#{@version}/#{@namespace}/#{corporation_id}/blueprints/"
-    |> API.auth_get(token)
+    |> API.get()
   end
 
   @version "v2"
-  def container_logs(corporation_id, token) do
+  def container_logs(corporation_id) do
     "#{@version}/#{@namespace}/#{corporation_id}/containers/logs/"
-    |> API.auth_get(token)
+    |> API.get()
+  end
+
+  def search(name, strict \\ true) do
+    API.Search.public(name, [:corporation], strict)
   end
 end

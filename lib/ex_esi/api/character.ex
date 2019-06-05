@@ -9,15 +9,31 @@ defmodule ExEsi.API.Character do
     |> API.get()
   end
 
+  @version "v1"
+  def agents_research(character_id) do
+    "/#{@version}/#{@namespace}/#{character_id}/agents_research/"
+    |> API.get()
+  end
+
   @version "v2"
-  def roles(character_id, token) do
+  def blueprints(character_id) do
+    "/#{@version}/characters/#{character_id}/blueprints/"
+    |> API.get()
+  end
+
+  @version "v2"
+  def roles(character_id) do
     "/#{@version}/#{@namespace}/#{character_id}/roles/"
-    |> API.auth_get(token)
+    |> API.get()
   end
 
   @version "v1"
-  def titles(character_id, token) do
+  def titles(character_id) do
     "/#{@version}/#{@namespace}/#{character_id}/titles/"
-    |> API.auth_get(token)
+    |> API.get()
+  end
+
+  def search(name, strict \\ true) do
+    API.Search.public(name, [:character], strict)
   end
 end

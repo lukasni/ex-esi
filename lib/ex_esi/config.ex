@@ -1,5 +1,4 @@
 defmodule ExEsi.Config do
-
   @common_config [
     :http_client,
     :debug_requests,
