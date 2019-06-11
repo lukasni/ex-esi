@@ -2,27 +2,32 @@ defmodule ExEsi.API.Bookmarks do
   @moduledoc false
 
   alias ExEsi.API
+  alias ExEsi.API.{Character, Corporation}
 
   @version "v2"
-  def character(character_id, page) do
+  @spec list(ExEsi.API.Character.t() | ExEsi.API.Corporation.t(), integer) ::
+          ExEsi.Operation.JSON.t()
+  def list(%Character{id: character_id}, page) do
     "/#{@version}/#{character_id}/bookmarks/"
     |> API.get("", %{"page" => page})
   end
 
+  @version "v1"
+  def list(%Corporation{id: corporation_id}, page) do
+    "/#{@version}/#{corporation_id}/bookmarks/"
+    |> API.get("", %{"page" => page})
+  end
+
   @version "v2"
-  def character_folders(character_id, page) do
+  @spec folders(ExEsi.API.Character.t() | ExEsi.API.Corporation.t(), integer) ::
+          ExEsi.Operation.JSON.t()
+  def folders(%Character{id: character_id}, page) do
     "/#{@version}/#{character_id}/bookmarks/folders/"
     |> API.get("", %{"page" => page})
   end
 
   @version "v1"
-  def corporation(corporation_id, page) do
-    "/#{@version}/#{corporation_id}/bookmarks/"
-    |> API.get("", %{"page" => page})
-  end
-
-  @version "v1"
-  def corporation_folders(corporation_id, page) do
+  def folders(%Corporation{id: corporation_id}, page) do
     "/#{@version}/#{corporation_id}/bookmarks/folders/"
     |> API.get("", %{"page" => page})
   end
