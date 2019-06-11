@@ -21,6 +21,10 @@ defmodule ExEsi.API do
     request(path, :put, data, params, headers)
   end
 
+  def delete(path, data \\ "", params \\ %{}, headers \\ []) do
+    request(path, :delete, data, params, headers)
+  end
+
   # def auth_get(path, token, data \\ "", params \\ %{}, headers \\ []) do
   #   headers = auth_headers(headers, token)
 
