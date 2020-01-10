@@ -37,9 +37,12 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   end
 
   defp meta(headers) do
-    case List.keyfind(headers, "X-Pages", 0) do
-      nil -> %{}
-      pages -> %{pages: pages}
+    with {"X-Pages", pages} <- List.keyfind(headers, "X-Pages", 0),
+         {pages, _rest} <- Integer.parse(pages) do
+      %{pages: pages}
+    else
+      _ ->
+        %{}
     end
   end
 end
