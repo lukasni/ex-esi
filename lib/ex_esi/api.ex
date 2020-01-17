@@ -24,4 +24,14 @@ defmodule ExEsi.API do
   def delete(path, data \\ "", params \\ %{}, headers \\ []) do
     request(path, :delete, data, params, headers)
   end
+
+  def put_param(op, key, value) do
+    op
+    |> Map.update!(:params, &Map.put(&1, key, value))
+  end
+
+  def put_after_parse(op, fun) do
+    op
+    |> Map.put(:after_parse, fun)
+  end
 end

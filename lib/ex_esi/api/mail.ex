@@ -8,25 +8,14 @@ defmodule ExEsi.API.Mail do
   @type recipient :: %{recipient_type: recipient_type, recipient_id: integer}
 
   @version "v1"
-  @spec headers(ExEsi.API.Character.t(), list(integer) | nil, integer | nil) ::
-          ExEsi.Operation.JSON.t()
-  def headers(%Character{id: character_id}, labels \\ nil, last_mail_id \\ nil) do
-    params = %{}
-
-    params =
-      case labels do
-        labels when is_list(labels) -> Map.put(params, "labels", Enum.join(labels, ","))
-        _ -> params
-      end
-
-    params =
-      case last_mail_id do
-        id when is_integer(id) -> Map.put(params, "last_mail_id", id)
-        _ -> params
-      end
-
+  def headers(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/mail/"
-    |> API.get("", params)
+    |> API.get()
+  end
+
+  def headers(%Character{} = character, labels) do
+    headers(character)
+    |> API.put_param("labels", Enum.join(labels, ","))
   end
 
   @version "v1"

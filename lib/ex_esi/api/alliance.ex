@@ -17,6 +17,7 @@ defmodule ExEsi.API.Alliance do
   def info(%__MODULE__{id: alliance_id}) do
     "/#{@version}/#{@namespace}/#{alliance_id}/"
     |> API.get()
+    |> API.put_after_parse(&Map.put(&1, "id", alliance_id))
   end
 
   @version "v1"

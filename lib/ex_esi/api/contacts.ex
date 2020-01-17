@@ -11,23 +11,21 @@ defmodule ExEsi.API.Contacts do
   ]
 
   @version "v2"
-  def list(subject, page \\ 1)
-
-  def list(%Alliance{id: alliance_id}, page) do
+  def list(%Alliance{id: alliance_id}) do
     "/#{@version}/alliances/#{alliance_id}/contacts/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v2"
-  def list(%Character{id: character_id}, page) do
+  def list(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/contacts/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v2"
-  def list(%Corporation{id: corporation_id}, page) do
+  def list(%Corporation{id: corporation_id}) do
     "/#{@version}/corporations/#{corporation_id}/contacts/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
@@ -50,10 +48,11 @@ defmodule ExEsi.API.Contacts do
 
   @version "v2"
   def delete(%Character{id: character_id}, contact_ids) do
-    params = %{"contact_ids" => Enum.join(contact_ids, ",")}
+    ids = Enum.join(contact_ids, ",")
 
     "/#{@version}/characters/#{character_id}/contacts/"
-    |> API.delete("", params)
+    |> API.delete()
+    |> API.put_param("contact_ids", ids)
   end
 
   @version "v2"

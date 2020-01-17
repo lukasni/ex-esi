@@ -9,6 +9,7 @@ defmodule ExEsi.API.Corporation do
   def info(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/"
     |> API.get()
+    |> API.put_after_parse(&Map.put(&1, "id", corporation_id))
   end
 
   @version "v2"
@@ -48,15 +49,15 @@ defmodule ExEsi.API.Corporation do
   end
 
   @version "v1"
-  def medals(%__MODULE__{id: corporation_id}, page) do
+  def medals(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/medals/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def medals_issued(%__MODULE__{id: corporation_id}, page) do
+  def medals_issued(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/medals/issued/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v3"
@@ -90,45 +91,46 @@ defmodule ExEsi.API.Corporation do
   end
 
   @version "v1"
-  def roles_history(%__MODULE__{id: corporation_id}, page) do
+  def roles_history(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/roles/history/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def shareholders(%__MODULE__{id: corporation_id}, page) do
+  def shareholders(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/shareholders/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def standings(%__MODULE__{id: corporation_id}, page) do
+  def standings(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/standings/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def starbases(%__MODULE__{id: corporation_id}, page) do
+  def starbases(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/starbases/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
   def starbase_details(%__MODULE__{id: corporation_id}, starbase_id, system_id) do
     "/#{@version}/#{@namespace}/#{corporation_id}/starbases/#{starbase_id}/"
-    |> API.get("", %{"system_id" => system_id})
+    |> API.get()
+    |> API.put_param("system_id", system_id)
   end
 
   @version "v3"
-  def structures(%__MODULE__{id: corporation_id}, page) do
+  def structures(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/structures/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def titles(%__MODULE__{id: corporation_id}, page) do
+  def titles(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/titles/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"

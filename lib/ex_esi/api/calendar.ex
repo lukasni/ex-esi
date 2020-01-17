@@ -7,16 +7,10 @@ defmodule ExEsi.API.Calendar do
   @type rsvp :: :accepted | :declined | :tentative
 
   @version "v1"
-  @spec list_events(ExEsi.API.Character.t(), nil | integer) :: ExEsi.Operation.JSON.t()
-  def list_events(%Character{id: character_id}, from_id) do
-    params =
-      case from_id do
-        nil -> %{}
-        from_id when is_integer(from_id) -> %{"from_event" => from_id}
-      end
-
+  @spec list_events(ExEsi.API.Character.t()) :: ExEsi.Operation.JSON.t()
+  def list_events(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/calendar/"
-    |> API.get("", params)
+    |> API.get()
   end
 
   @version "v3"

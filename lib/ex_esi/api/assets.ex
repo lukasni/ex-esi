@@ -3,17 +3,17 @@ defmodule ExEsi.API.Assets do
   alias ExEsi.API.{Character, Corporation}
 
   @version "v3"
-  @spec list(ExEsi.API.Character.t() | ExEsi.API.Corporation.t(), integer) ::
+  @spec list(ExEsi.API.Character.t() | ExEsi.API.Corporation.t()) ::
           ExEsi.Operation.JSON.t()
-  def list(%Character{id: character_id}, page) do
+  def list(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/assets/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v3"
-  def list(%Corporation{id: corporation_id}, page) do
+  def list(%Corporation{id: corporation_id}) do
     "/#{@version}/corporations/#{corporation_id}/assets/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v2"
@@ -40,7 +40,7 @@ defmodule ExEsi.API.Assets do
 
   @version "v1"
   def names(%Corporation{id: corporation_id}, item_ids) do
-    "/#{@version}/corporations/#{corporation_id}//assets/names/"
+    "/#{@version}/corporations/#{corporation_id}/assets/names/"
     |> API.post(item_ids)
   end
 end

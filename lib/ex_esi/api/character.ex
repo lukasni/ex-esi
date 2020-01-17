@@ -10,6 +10,7 @@ defmodule ExEsi.API.Character do
   def info(%__MODULE__{id: character_id}) do
     "/#{@version}/#{@namespace}/#{character_id}/"
     |> API.get()
+    |> API.put_after_parse(&Map.put(&1, "id", character_id))
   end
 
   @version "v1"

@@ -4,15 +4,9 @@ defmodule ExEsi.API.Wars do
   alias ExEsi.API
 
   @version "v1"
-  def list(max_war_id \\ nil) do
-    params =
-      case max_war_id do
-        nil -> %{}
-        id -> %{"max_war_id" => id}
-      end
-
+  def list() do
     "/#{@version}/wars/"
-    |> API.get("", params)
+    |> API.get()
   end
 
   @version "v1"

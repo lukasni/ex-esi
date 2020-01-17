@@ -12,37 +12,31 @@ defmodule ExEsi.API.Wallet do
 
   @version "v1"
   def wallets(%Corporation{id: corporation_id}) do
-    "/#{@version}/corporation/#{corporation_id}/wallets/"
+    "/#{@version}/corporations/#{corporation_id}/wallets/"
     |> API.get()
   end
 
   @version "v1"
-  def journal(%Character{id: character_id}, page \\ 1) when is_integer(page) do
+  def journal(%Character{id: character_id})  do
     "/#{@version}/character/#{character_id}/wallet/journal/"
-    |> API.get("", %{"page" => page})
+    |> API.get()
   end
 
   @version "v1"
-  def transactions(%Character{id: character_id}, from_id \\ nil) do
-    params =
-      case from_id do
-        nil -> %{}
-        id -> %{"from_id" => id}
-      end
-
+  def transactions(%Character{id: character_id}) do
     "/#{@version}/character/#{character_id}/wallet/transactions/"
-    |> API.get("", params)
+    |> API.get()
+  end
+
+  @version "v4"
+  def journal(%Corporation{id: corporation_id}, division) do
+    "/#{@version}/corporations/#{corporation_id}/wallets/#{division}/journal/"
+    |> API.get()
   end
 
   @version "v1"
-  def corp_journal(%Corporation{id: corporation_id}, division, page \\ 1) do
-    "/#{@version}/corporation/#{corporation_id}/wallets/#{division}/journal/"
-    |> API.get("", %{"page" => page})
-  end
-
-  @version "v1"
-  def corp_transactions(%Corporation{id: corporation_id}, division, page \\ 1) do
-    "/#{@version}/corporation/#{corporation_id}/wallets/#{division}/transactions/"
-    |> API.get("", %{"page" => page})
+  def transactions(%Corporation{id: corporation_id}, division) do
+    "/#{@version}/corporations/#{corporation_id}/wallets/#{division}/transactions/"
+    |> API.get()
   end
 end
