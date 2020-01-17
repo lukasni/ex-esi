@@ -4,19 +4,28 @@ defmodule ExEsi.Operation.JSON do
             data: "",
             params: %{},
             headers: [],
-            stream_builder: nil
+            stream_builder: nil,
+            after_parse: nil
 end
 
 defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   # @type response_t :: %{} | ExEsi.Request.error_t
+
+  require Logger
 
   def perform(operation, config) do
     url = ExEsi.Request.Url.build(operation, config)
 
     headers = operation.headers
 
-    ExEsi.Request.request(operation.http_method, url, operation.data, headers, config)
-    |> parse(config)
+    case cached_request(operation.http_method, url, config) do
+      nil ->
+        ExEsi.Request.request(operation.http_method, url, operation.data, headers, config)
+        |> cache(operation.http_method, url, config)
+      result ->
+        result
+    end
+    |> parse(operation, config)
   end
 
   def stream!(%ExEsi.Operation.JSON{stream_builder: nil}, _) do
@@ -29,11 +38,48 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
     fun.(config)
   end
 
-  defp parse({:error, result}, _config), do: {:error, result}
-  defp parse({:ok, %{body: "", headers: headers}}, _config), do: {:ok, %{}, meta(headers)}
+  defp cached_request(method, url, config) do
+    case config[:cache].get({method, url}) do
+      nil -> nil
 
-  defp parse({:ok, %{body: body, headers: headers}}, config) do
-    {:ok, config[:json_codec].decode!(body), meta(headers)}
+      result ->
+        if config[:debug_requests] do
+          Logger.debug(
+            "ExEsi: Cached Response: #{method |> Atom.to_string() |> String.upcase()} #{inspect(url)}"
+          )
+        end
+        result
+    end
+  end
+
+  defp cache({:error, result}, _method, _url, _config), do: {:error, result}
+  defp cache({:ok, %{headers: headers}} = response, method, url, config) do
+    with {"Expires", expires} when is_binary(expires) <- List.keyfind(headers, "Expires", 0),
+         {:ok, expires} <- Timex.parse(expires, "{RFC1123}")
+    do
+      config[:cache].set({method, url}, response, expires)
+    else
+      err ->
+        IO.inspect(err)
+        IO.inspect(response)
+    end
+
+    response
+  end
+
+  defp parse({:error, result}, _operation, _config), do: {:error, result, %{}}
+  defp parse({:ok, %{body: "", headers: headers}}, _operation, _config), do: {:ok, %{}, meta(headers)}
+
+  defp parse({:ok, %{body: body, headers: headers}}, operation, config) do
+    parsed = body
+    |> config[:json_codec].decode!()
+
+    response = case operation.after_parse do
+      f when is_function(f) -> f.(parsed)
+      _ -> parsed
+    end
+
+    {:ok, response, meta(headers)}
   end
 
   defp meta(headers) do
