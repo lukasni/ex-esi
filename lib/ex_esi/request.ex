@@ -36,7 +36,7 @@ defmodule ExEsi.Request do
 
     if config[:debug_requests] do
       Logger.debug(
-        "ExEsi: Request URL: #{inspect(url)} HEADERS: #{inspect(headers)} BODY: #{
+        "ExEsi: Request URL: #{inspect(safe_url)} HEADERS: #{inspect(full_headers)} BODY: #{
           inspect(req_body)
         } ATTEMPT: #{attempt}"
       )

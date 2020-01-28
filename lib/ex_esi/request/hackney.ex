@@ -3,6 +3,7 @@ defmodule ExEsi.Request.Hackney do
 
   @default_opts [recv_timeout: 30_000]
 
+  @impl ExEsi.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
     opts = Application.get_env(:ex_esi, :hackney_ops, @default_opts)
     opts = http_opts ++ [:with_body | opts]

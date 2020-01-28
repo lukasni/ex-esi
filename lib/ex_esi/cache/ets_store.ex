@@ -17,25 +17,30 @@ defmodule ExEsi.Cache.ETSStore do
     GenServer.start_link(__MODULE__, default, name: @name)
   end
 
+  @impl ExEsi.Cache
   def get(key) do
     GenServer.call(@name, {:get, key})
   end
 
+  @impl ExEsi.Cache
   def set(key, value, expires) do
     GenServer.cast(@name, {:set, key, value, expires})
   end
 
+  @impl ExEsi.Cache
   def drop(key) do
     GenServer.cast(@name, {:drop, key})
   end
 
   # Server Callbacks
 
+  @impl GenServer
   def init(_) do
     schedule_expire()
     {:ok, :ets.new(__MODULE__, [])}
   end
 
+  @impl GenServer
   def handle_cast({:set, key, value, expires}, state) do
     :ets.insert(state, {key, value, DateTime.to_unix(expires)})
     {:noreply, state}
@@ -46,6 +51,7 @@ defmodule ExEsi.Cache.ETSStore do
     {:noreply, state}
   end
 
+  @impl GenServer
   def handle_call({:get, key}, _from, state) do
     case :ets.lookup(state, key) do
       [{^key, value, expires}] -> {:reply, result_or_nil(value, expires), state}
@@ -53,6 +59,7 @@ defmodule ExEsi.Cache.ETSStore do
     end
   end
 
+  @impl GenServer
   def handle_info(:clean_expired, state) do
     ts = DateTime.utc_now() |> DateTime.to_unix()
     state

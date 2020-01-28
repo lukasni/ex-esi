@@ -17,25 +17,30 @@ defmodule ExEsi.Cache.MapStore do
     GenServer.start_link(__MODULE__, %{}, name: @name)
   end
 
+  @impl ExEsi.Cache
   def get(key) do
     GenServer.call(@name, {:get, key})
   end
 
+  @impl ExEsi.Cache
   def set(key, value, expires) do
     GenServer.cast(@name, {:set, key, value, expires})
   end
 
+  @impl ExEsi.Cache
   def drop(key) do
     GenServer.cast(@name, {:drop, key})
   end
 
   # Server Callbacks
 
+  @impl GenServer
   def init(args) do
     schedule_expire()
     {:ok, args}
   end
 
+  @impl GenServer
   def handle_cast({:set, key, value, expires}, state) do
     {:noreply, Map.put(state, key, %{expires: expires, value: value})}
   end
@@ -44,6 +49,7 @@ defmodule ExEsi.Cache.MapStore do
     {:noreply, Map.delete(state, key)}
   end
 
+  @impl GenServer
   def handle_call({:get, key}, _from, state) do
     with result when not is_nil(result) <- Map.get(state, key),
          true <- Timex.after?(result.expires, DateTime.utc_now())
@@ -56,6 +62,7 @@ defmodule ExEsi.Cache.MapStore do
     end
   end
 
+  @impl GenServer
   def handle_info(:clean_expired, state) do
     new_state =
       state

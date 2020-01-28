@@ -3,6 +3,9 @@ defmodule ExEsi.API.Alliance do
 
   @namespace "alliances"
 
+  @type t :: %__MODULE__{
+    id: integer
+  }
   defstruct id: 0
 
   @version "v1"

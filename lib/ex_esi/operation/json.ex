@@ -1,4 +1,13 @@
 defmodule ExEsi.Operation.JSON do
+  @type t :: %__MODULE__{
+    http_method: ExEsi.Request.HttpClient.http_method(),
+    path: String.t(),
+    data: String.t(),
+    params: Map.t(),
+    headers: Keyword.t(),
+    stream_builder: function() | nil,
+    after_parse: function() | nil
+  }
   defstruct http_method: :get,
             path: "/",
             data: "",

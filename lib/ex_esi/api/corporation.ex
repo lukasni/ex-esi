@@ -3,6 +3,9 @@ defmodule ExEsi.API.Corporation do
 
   @namespace "corporations"
 
+  @type t :: %__MODULE__{
+    id: integer
+  }
   defstruct id: 0
 
   @version "v4"

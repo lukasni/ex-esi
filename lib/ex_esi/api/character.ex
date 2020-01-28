@@ -3,6 +3,9 @@ defmodule ExEsi.API.Character do
 
   @namespace "characters"
 
+  @type t :: %__MODULE__{
+    id: integer
+  }
   defstruct id: 0
 
   @version "v4"
@@ -114,5 +117,6 @@ defmodule ExEsi.API.Character do
   @spec search(binary, boolean) :: ExEsi.Operation.JSON.t()
   def search(name, strict \\ true) do
     API.Search.public(name, [:character], strict)
+    |> API.put_after_parse(&Map.get(&1, "character"))
   end
 end
