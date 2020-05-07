@@ -36,4 +36,9 @@ defmodule ExEsi.API.Alliance do
     "/#{@version}/#{@namespace}/#{alliance_id}/icons/"
     |> API.get()
   end
+
+  def search(name, strict \\ true) do
+    API.Search.public(name, [:alliance], strict)
+    |> API.put_after_parse(&Map.get(&1, "alliance"))
+  end
 end

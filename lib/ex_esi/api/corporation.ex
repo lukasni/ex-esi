@@ -144,5 +144,6 @@ defmodule ExEsi.API.Corporation do
 
   def search(name, strict \\ true) do
     API.Search.public(name, [:corporation], strict)
+    |> API.put_after_parse(&Map.get(&1, "corporation"))
   end
 end
