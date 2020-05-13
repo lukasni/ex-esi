@@ -67,10 +67,6 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
          {:ok, expires} <- Timex.parse(expires, "{RFC1123}")
     do
       config[:cache].set({method, url}, response, expires)
-    else
-      err ->
-        IO.inspect(err)
-        IO.inspect(response)
     end
 
     response
