@@ -16,6 +16,7 @@ defmodule ExEsi.Config do
     json_codec: Jason,
     cache: ExEsi.Cache.MapStore,
     retries: [max_attempts: 10, base_backoff_in_ms: 10, max_backoff_in_ms: 10000],
+    retry404: false,
     user_agent: "ExEsi - User didn't update agent",
     esi_base_url: "https://esi.evetech.net"
   }

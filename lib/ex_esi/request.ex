@@ -42,6 +42,8 @@ defmodule ExEsi.Request do
       )
     end
 
+    retry404 = config[:retry404]
+
     case config[:http_client].request(
            method,
            safe_url,
@@ -56,16 +58,16 @@ defmodule ExEsi.Request do
         Logger.warn("ExEsi: Received redirect")
         {:error, {:http_error, status, "redirected"}}
 
-      {:ok, %{status_code: 404} = resp} ->
+      {:ok, %{status_code: 404} = resp} when retry404 == false ->
         {:error, {:http_error, 404, Map.get(resp, :body, "not found")}}
 
       {:ok, %{status_code: 420}} ->
         {:error, {:http_error, 420, "error limit reached"}}
 
-      {:ok, %{status_code: status} = resp} when status in 400..499 ->
+      {:ok, %{status_code: status} = resp} when status != 404 and status in 400..499 ->
         {:error, {:http_error, status, Map.get(resp, :body, "client error")}}
 
-      {:ok, %{status_code: status} = resp} when status >= 500 ->
+      {:ok, %{status_code: status} = resp} when status >= 500 or retry404 == true ->
         body = Map.get(resp, :body)
         Logger.warn("ExEsi: Server Error #{inspect(status)} - #{inspect(body)}")
         reason = {:http_error, status, body}
