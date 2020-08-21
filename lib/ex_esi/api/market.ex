@@ -18,11 +18,11 @@ defmodule ExEsi.API.Market do
     |> API.get("")
   end
 
-  @version "v1"
   @spec history(ExEsi.API.Character.t() | ExEsi.API.Corporation.t()) ::
           ExEsi.Operation.JSON.t()
   def history(subject)
 
+  @version "v1"
   def history(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/orders/history/"
     |> API.get()

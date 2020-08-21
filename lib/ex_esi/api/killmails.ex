@@ -19,5 +19,6 @@ defmodule ExEsi.API.Killmails do
   @version "v1"
   def get(killmail_id, killmail_hash) do
     "/#{@version}/killmails/#{killmail_id}/#{killmail_hash}/"
+    |> API.get()
   end
 end

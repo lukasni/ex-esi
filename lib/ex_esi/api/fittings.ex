@@ -16,7 +16,7 @@ defmodule ExEsi.API.Fittings do
     |> API.post(fitting)
   end
 
-  @version "v2"
+  @version "v1"
   def delete(%Character{id: character_id}, fitting_id) do
     "/#{@version}/characters/#{character_id}/fittings/#{fitting_id}/"
     |> API.delete()

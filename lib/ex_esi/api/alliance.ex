@@ -30,7 +30,7 @@ defmodule ExEsi.API.Alliance do
     |> API.get()
   end
 
-  @version "v1"
+  @version "v2"
   @spec icons(ExEsi.API.Alliance.t()) :: ExEsi.Operation.JSON.t()
   def icons(%__MODULE__{id: alliance_id}) do
     "/#{@version}/#{@namespace}/#{alliance_id}/icons/"

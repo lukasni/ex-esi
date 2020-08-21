@@ -11,7 +11,7 @@ defmodule ExEsi.API.Location do
     |> API.get()
   end
 
-  @version "v1"
+  @version "v2"
   def online(%Character{id: character_id}) do
     "/#{@version}/characters/#{character_id}/online/"
     |> API.get()

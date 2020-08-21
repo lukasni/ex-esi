@@ -2,7 +2,7 @@ defmodule ExEsi.API.Assets do
   alias ExEsi.API
   alias ExEsi.API.{Character, Corporation}
 
-  @version "v3"
+  @version "v5"
   @spec list(ExEsi.API.Character.t() | ExEsi.API.Corporation.t()) ::
           ExEsi.Operation.JSON.t()
   def list(%Character{id: character_id}) do
@@ -10,7 +10,7 @@ defmodule ExEsi.API.Assets do
     |> API.get()
   end
 
-  @version "v3"
+  @version "v5"
   def list(%Corporation{id: corporation_id}) do
     "/#{@version}/corporations/#{corporation_id}/assets/"
     |> API.get()

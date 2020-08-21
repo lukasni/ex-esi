@@ -45,7 +45,7 @@ defmodule ExEsi.API.Corporation do
     |> API.get()
   end
 
-  @version "v1"
+  @version "v2"
   def icons(%__MODULE__{id: corporation_id}) do
     "/#{@version}/#{@namespace}/#{corporation_id}/icons/"
     |> API.get()

@@ -16,7 +16,7 @@ defmodule ExEsi.API.Wallet do
     |> API.get()
   end
 
-  @version "v1"
+  @version "v6"
   def journal(%Character{id: character_id})  do
     "/#{@version}/character/#{character_id}/wallet/journal/"
     |> API.get()
