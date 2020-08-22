@@ -62,6 +62,7 @@ defmodule ExEsi.Cache.ETSStore do
   @impl GenServer
   def handle_info(:clean_expired, state) do
     ts = DateTime.utc_now() |> DateTime.to_unix()
+
     state
     |> :ets.select_delete([{{:_, :_, :"$1"}, [{:<, :"$1", ts}], [true]}])
 

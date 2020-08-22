@@ -6,6 +6,7 @@ defmodule ExEsi.API.Industry do
 
   @version "v1"
   def jobs(subject, include_completed \\ false)
+
   def jobs(%Character{id: character_id}, include_completed) do
     "/#{@version}/characters/#{character_id}/industry/jobs/"
     |> API.get()

@@ -52,11 +52,12 @@ defmodule ExEsi.Cache.MapStore do
   @impl GenServer
   def handle_call({:get, key}, _from, state) do
     with result when not is_nil(result) <- Map.get(state, key),
-         true <- Timex.after?(result.expires, DateTime.utc_now())
-    do
+         true <- Timex.after?(result.expires, DateTime.utc_now()) do
       {:reply, Map.get(state, key).value, state}
     else
-      nil -> {:reply, nil, state}
+      nil ->
+        {:reply, nil, state}
+
       false ->
         {:reply, nil, Map.delete(state, key)}
     end
@@ -66,7 +67,9 @@ defmodule ExEsi.Cache.MapStore do
   def handle_info(:clean_expired, state) do
     new_state =
       state
-      |> Stream.filter(fn {_key, %{expires: expires}} -> Timex.after?(expires, DateTime.utc_now()) end)
+      |> Stream.filter(fn {_key, %{expires: expires}} ->
+        Timex.after?(expires, DateTime.utc_now())
+      end)
       |> Enum.into(%{})
 
     schedule_expire()
