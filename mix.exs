@@ -26,6 +26,7 @@ defmodule ExEsi.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       # {:gen_stage, "~> 0.14.0"}
       {:hackney, "~> 1.15", optional: true},
+      {:finch, ">= 0.3.0", optional: true},
       {:jason, "~> 1.1", optional: true},
       {:timex, "~> 3.5"}
     ]
