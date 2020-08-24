@@ -69,7 +69,7 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   defp cache({:error, result}, _method, _url, _config), do: {:error, result}
 
   defp cache({:ok, %{headers: headers}} = response, method, url, config) do
-    with {"Expires", expires} when is_binary(expires) <- List.keyfind(headers, "Expires", 0),
+    with {"expires", expires} when is_binary(expires) <- List.keyfind(headers, "expires", 0),
          {:ok, expires} <- Timex.parse(expires, "{RFC1123}") do
       config[:cache].set({method, url}, response, expires)
     end
@@ -78,7 +78,6 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   end
 
   defp parse({:error, result}, _operation, _config), do: {:error, result, %{}}
-  defp parse({:ok, %{body: "", headers: headers}}, _operation, _config), do: {:ok, %{}, meta(headers)}
 
   defp parse({:ok, %{body: "", headers: headers}}, _operation, _config),
     do: {:ok, %{}, meta(headers)}
@@ -98,12 +97,12 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   end
 
   defp meta(headers) do
-    with {"X-Pages", pages} <- List.keyfind(headers, "X-Pages", 0),
+    with {"x-pages", pages} <- List.keyfind(headers, "x-pages", 0),
          {pages, _rest} <- Integer.parse(pages) do
-      %{pages: pages}
+      %{pages: pages, headers: headers}
     else
       _ ->
-        %{}
+        %{headers: headers}
     end
   end
 end
