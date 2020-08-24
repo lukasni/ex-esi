@@ -4,8 +4,8 @@ defmodule ExEsi.API.Character do
   @namespace "characters"
 
   @type t :: %__MODULE__{
-    id: integer
-  }
+          id: integer
+        }
   defstruct id: 0
 
   @version "v4"
