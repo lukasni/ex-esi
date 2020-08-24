@@ -99,10 +99,10 @@ defimpl ExEsi.Operation, for: ExEsi.Operation.JSON do
   defp meta(headers) do
     with {"x-pages", pages} <- List.keyfind(headers, "x-pages", 0),
          {pages, _rest} <- Integer.parse(pages) do
-      %{pages: pages}
+      %{pages: pages, headers: headers}
     else
       _ ->
-        %{}
+        %{headers: headers}
     end
   end
 end

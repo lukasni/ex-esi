@@ -8,7 +8,7 @@ defmodule ExEsi.Request.Finch do
 
     request = Finch.build(method, url, headers, body)
 
-    case Finch.request(request, name) do
+    case Finch.request(request, name, http_opts) do
       {:ok, %{status: status, headers: headers, body: body}} ->
         {:ok,
          %{
